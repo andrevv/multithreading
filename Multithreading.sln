@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multithreading.Synchronizat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multithreading.Synchronization.Deadlock", "Multithreading.Synchronization.Deadlock\Multithreading.Synchronization.Deadlock.csproj", "{F0766E28-4EAB-4650-9624-D0C98C41ED28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multithreading.Synchronization.Volatiles", "Multithreading.Synchronization.Volatiles\Multithreading.Synchronization.Volatiles.csproj", "{EC27130F-2141-4D92-80E7-0F2B5657E535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multithreading.Synchronization.Atomics", "Multithreading.Synchronization.Atomics\Multithreading.Synchronization.Atomics.csproj", "{B7933BC8-C828-4F15-BA7E-A194876411AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{F0766E28-4EAB-4650-9624-D0C98C41ED28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0766E28-4EAB-4650-9624-D0C98C41ED28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0766E28-4EAB-4650-9624-D0C98C41ED28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC27130F-2141-4D92-80E7-0F2B5657E535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC27130F-2141-4D92-80E7-0F2B5657E535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC27130F-2141-4D92-80E7-0F2B5657E535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC27130F-2141-4D92-80E7-0F2B5657E535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7933BC8-C828-4F15-BA7E-A194876411AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7933BC8-C828-4F15-BA7E-A194876411AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7933BC8-C828-4F15-BA7E-A194876411AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7933BC8-C828-4F15-BA7E-A194876411AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EACF7F03-1F1E-4D50-9475-0A773D6B99E9} = {C54FB3F8-601E-4040-8CC5-9542E2C3E51E}

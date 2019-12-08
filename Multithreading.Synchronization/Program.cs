@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Multithreading.Synchronization
@@ -7,25 +8,26 @@ namespace Multithreading.Synchronization
     {
         private static void Main()
         {
-            UnSynchronized();
-            Synchronized();
+            const int numberOfThreads = 10;
+            const int numberOfCycles = 1_000_000;
+            
+            UnSynchronized(numberOfThreads, numberOfCycles);
+            
+            //Locked(numberOfThreads, numberOfCycles);
+            
+            //Atomic(numberOfThreads, numberOfCycles);
         }
 
-        private static void UnSynchronized()
+        private static void UnSynchronized(int numberOfThreads, int numberOfCycles)
         {
             var counter = 0;
-
-            Console.WriteLine($"UnSynchronized before: {counter}.");
-
-            const int numberOfThreads = 10;
-            const int numberOfIterations = 10_000;
 
             var threads = new Thread[numberOfThreads];
             for (var i = 0; i < numberOfThreads; i++)
             {
                 threads[i] = new Thread(() =>
                 {
-                    for (var j = 0; j < numberOfIterations; j++)
+                    for (var j = 0; j < numberOfCycles; j++)
                     {
                         counter++;
                         Thread.SpinWait(100);
@@ -33,6 +35,8 @@ namespace Multithreading.Synchronization
                     }
                 });
             }
+
+            var sw = Stopwatch.StartNew();
 
             for (var i = 0; i < numberOfThreads; i++)
             {
@@ -43,26 +47,23 @@ namespace Multithreading.Synchronization
             {
                 threads[i].Join();
             }
+            
+            sw.Stop();
 
-            Console.WriteLine($"UnSynchronized after: {counter}.");
+            Console.WriteLine($"Counter: {counter}. Ran in {sw.Elapsed}.");
         }
 
-        private static void Synchronized()
+        private static void Locked(int numberOfThreads, int numberOfCycles)
         {
             var counter = 0;
             var counterLock = new object();
-
-            Console.WriteLine($"Synchronized before: {counter}.");
-            
-            const int numberOfThreads = 10;
-            const int numberOfIterations = 1_000_000;
 
             var threads = new Thread[numberOfThreads];
             for (var i = 0; i < numberOfThreads; i++)
             {
                 threads[i] = new Thread(() =>
                 {
-                    for (var j = 0; j < numberOfIterations; j++)
+                    for (var j = 0; j < numberOfCycles; j++)
                     {
                         lock (counterLock)
                         {
@@ -79,6 +80,8 @@ namespace Multithreading.Synchronization
                 });
             }
 
+            var sw = Stopwatch.StartNew();
+
             for (var i = 0; i < numberOfThreads; i++)
             {
                 threads[i].Start();
@@ -89,7 +92,44 @@ namespace Multithreading.Synchronization
                 threads[i].Join();
             }
 
-            Console.WriteLine($"Synchronized after: {counter}.");
+            sw.Stop();
+
+            Console.WriteLine($"Counter: {counter}. Ran in {sw.Elapsed}.");
+        }
+
+        private static void Atomic(int numberOfThreads, int numberOfCycles)
+        {
+            var counter = 0;
+            
+            var threads = new Thread[numberOfThreads];
+            for (var i = 0; i < numberOfThreads; i++)
+            {
+                threads[i] = new Thread(() =>
+                {
+                    for (var j = 0; j < numberOfCycles; j++)
+                    {
+                        Interlocked.Increment(ref counter);
+                        Thread.SpinWait(100);
+                        Interlocked.Decrement(ref counter);
+                    }
+                });
+            }
+
+            var sw = Stopwatch.StartNew();
+
+            for (var i = 0; i < numberOfThreads; i++)
+            {
+                threads[i].Start();
+            }
+
+            for (var i = 0; i < numberOfThreads; i++)
+            {
+                threads[i].Join();
+            }
+            
+            sw.Stop();
+
+            Console.WriteLine($"Counter: {counter}. Ran in ${sw.Elapsed}.");
         }
     }
 }
