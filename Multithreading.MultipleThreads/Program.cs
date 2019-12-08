@@ -8,19 +8,28 @@ namespace Multithreading.MultipleThreads
     {
         private static void Main()
         {
-            const int size = 100;
-            var data = Algorithms.GenerateRandomArray(size);
-            
-            const int numberOfThreads = 1;
-            
+        }
+    }
+
+    public static class ThreadingExtensions
+    {
+        public static decimal MultipleThreads(int[] data, int numberOfThreads)
+        {
+            return 0;
+        }
+        
+        public static decimal MultipleThreads(int[] data)
+        {
+            const int numberOfThreads = 4;
+
             var threads = new Thread[Math.Max(numberOfThreads - 1, 0)];
             var results = new decimal[Math.Max(numberOfThreads - 1, 0)];
-            
+
             // Aggregated result
             var total = 0M;
-            
+
             // Size of chunk to process in a thread
-            var stride = (int) Math.Round(size / (double)numberOfThreads);
+            var stride = (int) Math.Round(data.Length / (double) numberOfThreads);
 
             // Process (numberOfThreads - 1) chunks in separate threads
             for (var i = 0; i < threads.Length; i++)
@@ -46,9 +55,9 @@ namespace Multithreading.MultipleThreads
             }
 
             // Process the last chunk in the current thread
-            for (var i = (numberOfThreads - 1) * stride; i < size; i++)
+            for (var i = (numberOfThreads - 1) * stride; i < data.Length; i++)
             {
-                total += data[i];
+                total += Algorithms.Factorial(data[i]);
             }
 
             for (var i = 0; i < threads.Length; i++)
@@ -60,7 +69,7 @@ namespace Multithreading.MultipleThreads
                 total += results[i];
             }
 
-            Console.WriteLine(total);
+            return total;
         }
     }
 }

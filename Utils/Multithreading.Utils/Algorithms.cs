@@ -29,12 +29,15 @@ namespace Multithreading.Utils
         
         public static int[] GenerateRandomArray(int size)
         {
+            const int min = 1;
+            const int max = 20;
+
             var data = new int[size];
 
-            var random = new Random(DateTime.Now.Millisecond);
+            var random = new Random(Environment.TickCount);
             for (var i = 0; i < size; i++)
             {
-                data[i] = random.Next(1, 10);
+                data[i] = random.Next(min, max);
             }
 
             return data;

@@ -4,7 +4,7 @@ using Multithreading.Utils;
 
 namespace Multithreading.SingleThread
 {
-    internal static class Program
+    public static class Program
     {
         private static void Main()
         {
@@ -13,22 +13,30 @@ namespace Multithreading.SingleThread
             const int size = 100;
             var data = Algorithms.GenerateRandomArray(size);
 
-            var total = 0M;
+            Run(data);
+        }
 
-            var sw = Stopwatch.StartNew();
-            foreach (var e in data)
-            {
-                total += Algorithms.Factorial(e);
-            }
-            
-            sw.Stop();
-
-            Console.WriteLine($"Calculated {total} in {sw.Elapsed}.");
+        public static void Run(int[] data)
+        {
         }
 
         private static void WarmUp()
         {
             Algorithms.Factorial(5);
+        }
+    }
+
+    public static class ThreadingExtensions
+    {
+        public static decimal SingleThread(int[] data)
+        {
+            var total = 0M;
+            foreach (var e in data)
+            {
+                total += Algorithms.Factorial(e);
+            }
+
+            return total;
         }
     }
 }
