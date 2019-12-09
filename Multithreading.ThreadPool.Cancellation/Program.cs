@@ -2,25 +2,37 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Multithreading.Utils;
 
-namespace Multithreading.ThreadPool
+namespace Multithreading.ThreadPool.Cancellation
 {
     internal static class Program
     {
+        private static readonly CancellationTokenSource TokenSource = new CancellationTokenSource();
+
+        static Program()
+        {
+            Task.Run(() =>
+            {
+                Console.ReadLine();
+                Console.WriteLine("Cancelling...");
+                TokenSource.Cancel();
+            });
+        }
+
         private static void Main()
         {
             WarmUp();
 
             var data = Algorithms.GenerateRandomArray(200_000_000);
 
-            SumOfFactorials(data);
-            SumOfFactorials(data, 2);
-            SumOfFactorials(data, 4);
-            SumOfFactorials(data, 8);
-            SumOfFactorials(data, 10);
-            SumOfFactorials(data, 20);
+            var cancellationToken = TokenSource.Token;
+
+            SumOfFactorials(data, 2, cancellationToken);
+            SumOfFactorials(data, 4, cancellationToken);
+            SumOfFactorials(data, 8, cancellationToken);
         }
 
         private static void SumOfFactorials(int[] data)
@@ -32,7 +44,7 @@ namespace Multithreading.ThreadPool
             Console.WriteLine($"Calculated {total} in {sw.Elapsed} (single thread).");
         }
 
-        private static void SumOfFactorials(int[] data, int numberOfTasks)
+        private static void SumOfFactorials(int[] data, int numberOfTasks, CancellationToken cancellationToken)
         {
             var tasks = new List<Task<decimal>>();
 
@@ -50,11 +62,12 @@ namespace Multithreading.ThreadPool
                     decimal sum = 0;
                     for (var j = start; j < end; j++)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
                         sum += Algorithms.Factorial(data[j]);
                     }
 
                     return sum;
-                });
+                }, cancellationToken);
                 
                 tasks.Add(task);
             }
@@ -64,24 +77,46 @@ namespace Multithreading.ThreadPool
                 decimal sum = 0;
                 for (var i = chunkSize * (numberOfTasks - 1); i < data.Length; i++)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     sum += Algorithms.Factorial(data[i]);
                 }
 
                 return sum;
-            });
+            }, cancellationToken);
             
             tasks.Add(lastTask);
 
-            var total = tasks.Select(x => x.Result).Sum();
+            try
+            {
+                var total = tasks.Select(x => x.Result).Sum();
 
-            Console.WriteLine($"Calculated {total} in {sw.Elapsed} ({numberOfTasks} tasks).");
+                Console.WriteLine($"Calculated {total} in {sw.Elapsed} ({numberOfTasks} tasks).");
+            }
+            catch (AggregateException ae)
+            {
+                ae.Flatten().Handle(exception =>
+                {
+                    if (exception is TaskCanceledException)
+                    {
+                        // Task was cancelled.
+                        Console.WriteLine("Operation was cancelled.");
+                        return true;
+                    }
+
+                    Console.WriteLine($"Error occured: {exception.Message}.");
+                    
+                    TokenSource.Cancel();
+
+                    return true;
+                });
+            }
         }
 
         private static void WarmUp()
         {
             var data = Algorithms.GenerateRandomArray(1000);
             SumOfFactorials(data);
-            SumOfFactorials(data, 4);
+            SumOfFactorials(data, 4, CancellationToken.None);
             Console.Clear();
         }
     }
