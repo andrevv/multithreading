@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multithreading.Synchronizat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multithreading.ThreadPool.Cancellation", "Multithreading.ThreadPool.Cancellation\Multithreading.ThreadPool.Cancellation.csproj", "{4F601108-5555-4F17-A8C9-7974235A4096}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multithreading.Async", "Multithreading.Async\Multithreading.Async.csproj", "{27DF3F44-58F2-413B-971A-96998E3BDD69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{4F601108-5555-4F17-A8C9-7974235A4096}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F601108-5555-4F17-A8C9-7974235A4096}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F601108-5555-4F17-A8C9-7974235A4096}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27DF3F44-58F2-413B-971A-96998E3BDD69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27DF3F44-58F2-413B-971A-96998E3BDD69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27DF3F44-58F2-413B-971A-96998E3BDD69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27DF3F44-58F2-413B-971A-96998E3BDD69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EACF7F03-1F1E-4D50-9475-0A773D6B99E9} = {C54FB3F8-601E-4040-8CC5-9542E2C3E51E}
